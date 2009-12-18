@@ -11,24 +11,15 @@ class Yeti <Formula
     system 'ant'
     system 'ant jar'
     prefix.install JAR
-
-    bin.mkdir
-    yeti_exec = bin + 'yeti'
-
-    script = DATA.read
-    script.sub! "YETI_JAR_PATH_PLACEHOLDER", "#{prefix}/#{JAR}"
-
-    yeti_exec.write script
-
+    
+    yeti_exec = (bin+'yeti')
+    yeti_exec.write DATA.read
     File.chmod(0755, yeti_exec)
   end
 end
 
-
 __END__
 #!/bin/sh
 
-YETI=YETI_JAR_PATH_PLACEHOLDER
+YETI=#{prefix}/#{JAR}
 java -server -jar $YETI $@
-
-
