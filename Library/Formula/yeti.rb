@@ -11,7 +11,6 @@ class Yeti <Formula
 
   def install
     prefix.install JAR
-
     (bin+'yeti').write(eval('"'+DATA.read+'"'))
   end
 end
