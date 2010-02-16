@@ -8,7 +8,7 @@ class Clojure <Formula
   JAR = "clojure.jar"
 
   def script
-    DATA.read.gsub 'CLOJURE_JAR_PATH_PLACEHOLDER', prefix+JAR
+    DATA.read.gsub 'CLOJURE_JAR_PATH_PLACEHOLDER', "$(brew --prefix)/Cellar/#{name}/#{version}/"+JAR
   end
 
   def install
@@ -28,8 +28,8 @@ __END__
 CLOJURE=$CLASSPATH:CLOJURE_JAR_PATH_PLACEHOLDER
 
 if [ -z "$1" ]; then
-	java -server -cp $CLOJURE clojure.lang.Repl
+  java -server -cp $CLOJURE clojure.main
 else
-	scriptname=$1
-	java -server -cp $CLOJURE clojure.lang.Script $scriptname -- $*
+  scriptname=$1
+  java -server -cp $CLOJURE clojure.main $scriptname $*
 fi
