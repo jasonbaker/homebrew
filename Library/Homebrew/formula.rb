@@ -123,6 +123,7 @@ class Formula
     return false
   end
 
+
   def prefix
     validate_variable :name
     validate_variable :version
@@ -300,6 +301,11 @@ class Formula
     self.class.external_deps
   end
 
+  # This defines a formula to be mutually exclusive with another formula
+  def exclusions
+    self.class.exclusions or []
+  end
+
 protected
   # Pretty titles the command and buffers stdout/stderr
   # Throws if there's an error
@@ -474,7 +480,7 @@ private
       end
     end
 
-    attr_rw :url, :version, :homepage, :specs, :deps, :external_deps, :aliases, *CHECKSUM_TYPES
+    attr_rw :url, :version, :homepage, :specs, :deps, :external_deps, :aliases, :exclusions, *CHECKSUM_TYPES
 
     def head val=nil, specs=nil
       if specs
@@ -515,13 +521,17 @@ private
       @deps << name
     end
 
+    def excludes *names
+      @exclusions = names
+    end
+
     def skip_clean paths
       @skip_clean_paths ||= []
       [paths].flatten.each do |p|
         @skip_clean_paths << p.to_s unless @skip_clean_paths.include? p.to_s
       end
     end
-    
+
     def skip_clean_paths
       @skip_clean_paths or []
     end

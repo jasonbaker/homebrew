@@ -19,6 +19,15 @@ class FormulaInstaller
     end
     deps
   end
+
+  def expand_exclusions f
+    exclusions = []
+    f.exclusions.collect do |exc|
+      exc = Formula.factory exc
+      exclusions << exc
+    end
+    exclusions
+  end
   
   def pyerr dep
     brew_pip = ' brew install pip &&' unless Formula.factory('pip').installed?
@@ -69,11 +78,20 @@ Homebrew does not provide formulae for Ruby dependencies, rubygems does:
     end
   end
 
+  def check_exclusions f
+    expand_exclusions(f).each do |exc|
+      if exc.installed?
+        raise "Cannot install #{f.name} with #{exc.name} installed.  Please uninstall #{exc.name} to continue."
+      end
+    end
+  end
+
   def install f
     if @install_deps
       check_external_deps f
       check_formula_deps f
     end
+    check_exclusions f
     install_private f
   end
   
