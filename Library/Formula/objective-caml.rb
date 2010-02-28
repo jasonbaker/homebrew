@@ -6,6 +6,7 @@ class ObjectiveCaml <Formula
   @md5='fe011781f37f6b41fe08e0706969a89e'
   
   aka :ocaml, 'o-caml'
+  excludes 'godi'
 
   def install
     system "./configure --prefix #{prefix}"
